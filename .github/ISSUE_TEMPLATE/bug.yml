@@ -1,0 +1,22 @@
+name: Bug
+description: Report incorrect behavior
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and reproduction
+      description: Include expected behavior, actual behavior, and relevant environment.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What observable behavior would resolve this?
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation
+      description: Relevant tests or evidence; omit secrets.

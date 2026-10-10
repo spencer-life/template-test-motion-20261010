@@ -1,0 +1,25 @@
+name: Task or feature
+description: Propose scoped work with acceptance criteria
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Problem and goal
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and constraints
+      description: Include decisions needed and relevant exclusions.
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation plan
+      description: How will we verify the result?
