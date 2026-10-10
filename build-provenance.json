@@ -1,0 +1,7 @@
+{
+  "sourceRepository": "https://github.com/spencer-life/template-test-motion-20261010",
+  "sourceRevision": "7e81bc5d5ed188ab5ad4c46dae154f8e11940673",
+  "buildCommand": "mise exec -- node node_modules/vite/bin/vite.js build --base /template-test-motion-20261010/",
+  "node": "24.21.0",
+  "vite": "8.3.4"
+}
