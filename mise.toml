@@ -1,0 +1,107 @@
+min_version = "2026.10.7"
+
+[tools]
+python = "3.12.15"
+node = "24.21.0"
+aube = "2.7.0"
+"aqua:astral-sh/ruff" = "0.16.10"
+"aqua:tamasfe/taplo" = "0.10.0"
+"aqua:rvben/rumdl" = "0.2.79"
+
+[tasks.setup]
+description = "Install pinned tools, validate configuration, and install app dependencies"
+run = [
+  "mise install",
+  "mise tasks validate",
+  "python scripts/check.py",
+  "aube install --frozen-lockfile",
+]
+
+[tasks.dev]
+description = "Start the local Vite development server"
+run = "aube run --no-install dev"
+
+[tasks."deps:ci"]
+description = "Clean, frozen dependency installation for CI"
+run = "aube ci"
+
+[tasks.format]
+description = "Format Python, TOML, and app sources"
+run = [
+  "ruff format scripts tests",
+  "taplo fmt mise.toml ruff.toml .rumdl.toml",
+  "aube run --no-install format",
+]
+
+[tasks."format:check"]
+description = "Check formatting without changing files"
+depends = ["deps:ci"]
+run = [
+  "ruff format --check scripts tests",
+  "taplo fmt --check mise.toml ruff.toml .rumdl.toml",
+  "aube run --no-install format:check",
+]
+
+[tasks.lint]
+description = "Lint Python, Markdown, and repository configuration"
+run = [
+  "ruff check scripts tests",
+  "rumdl check .",
+  "python scripts/check.py",
+  "mise tasks validate",
+]
+
+[tasks.test]
+description = "Run repository tooling unit tests"
+run = "python -m unittest discover -s tests -v"
+
+[tasks."app:lint"]
+description = "Lint the TypeScript and CSS app"
+depends = ["deps:ci"]
+run = "aube run --no-install lint"
+
+[tasks."app:typecheck"]
+description = "Type-check app source"
+depends = ["deps:ci"]
+run = "aube run --no-install typecheck"
+
+[tasks."app:test"]
+description = "Run app unit tests"
+depends = ["deps:ci"]
+run = "aube run --no-install test"
+
+[tasks."app:build"]
+description = "Build the production app"
+depends = ["deps:ci"]
+run = "aube run --no-install build"
+
+[tasks.ci]
+description = "Run repository and application checks"
+depends = [
+  "format:check",
+  "lint",
+  "test",
+  "app:lint",
+  "app:typecheck",
+  "app:test",
+  "app:build",
+]
+
+[tasks.security]
+description = "Audit workflows and scan Git history for secrets"
+tools = { "aqua:rhysd/actionlint" = "1.7.12", uv = "0.12.24", "pipx:pyflakes" = "4.0.3", "aqua:zizmorcore/zizmor" = "1.30.1", "aqua:gitleaks/gitleaks" = "8.30.1" }
+run = "python scripts/security.py"
+
+[tasks."security:workflows"]
+description = "Audit workflow correctness and security"
+tools = { "aqua:rhysd/actionlint" = "1.7.12", uv = "0.12.24", "pipx:pyflakes" = "4.0.3", "aqua:zizmorcore/zizmor" = "1.30.1" }
+run = "python scripts/security.py --workflows-only"
+
+[tasks."security:secrets"]
+description = "Scan committed Git history for secrets"
+tools = { "aqua:gitleaks/gitleaks" = "8.30.1" }
+run = "python scripts/security.py --secrets-only"
+
+[tasks."deps:freshness"]
+description = "Query live upstream versions and lockfile security; never upgrade"
+run = "python scripts/freshness.py"

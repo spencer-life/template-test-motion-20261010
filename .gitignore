@@ -1,0 +1,42 @@
+# Local state and credentials
+.issues/
+.repo-state/
+.env
+.env.*
+!.env.example
+mise.local.toml
+.mise.local.toml
+*.pem
+*.key
+
+# Tool caches and generated output
+__pycache__/
+*.py[cod]
+.venv/
+.ruff_cache/
+node_modules/
+dist/
+build/
+coverage/
+.DS_Store
+
+# impeccable-ignore-start
+# Keep shared design/configuration tracked; exclude local and runtime state.
+**/.impeccable/config.local.json
+**/.impeccable/hook.cache.json
+**/.impeccable/hook.pending.json
+**/.impeccable/*.png
+**/.impeccable/review/
+**/.impeccable/questions/
+**/.impeccable/live/server.json
+**/.impeccable/live/sessions/
+**/.impeccable/live/previews/
+**/.impeccable/live/annotations/
+**/.impeccable/live/cache/
+**/.impeccable/live/manual-edit-apply-transaction.json
+**/.impeccable/live/manual-edit-events.jsonl
+**/.impeccable/live/manual-edit-evidence/
+**/.impeccable/live/pending-manual-edits.json
+**/.impeccable/live/deferred-svelte-component-accepts.json
+**/.impeccable/live/*.png
+# impeccable-ignore-end

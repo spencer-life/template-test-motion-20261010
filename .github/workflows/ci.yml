@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: core / ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      workflow_audits: ${{ steps.scope.outputs.workflow_audits }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: scope
+        name: Select checks from the full change set
+        run: python3 scripts/ci_scope.py
+      - uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
+        with:
+          version: 2026.10.7
+          cache: true
+      - name: Scan committed secrets
+        run: mise run security:secrets
+      - name: Validate documentation and app setup
+        if: steps.scope.outputs.full_ci == 'false'
+        run: |
+          mise exec -- rumdl check .
+          mise exec -- python scripts/check.py
+      - name: Run full CI
+        if: steps.scope.outputs.full_ci != 'false'
+        run: mise run ci
+  security:
+    name: security / security
+    needs: core
+    if: needs.core.outputs.workflow_audits == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/share/mise
+          key: security-mise-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('mise.toml', 'mise.lock', '.github/workflows/ci.yml') }}
+      - uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
+        with:
+          version: 2026.10.7
+          cache: false
+      - name: Audit workflow correctness and security
+        run: mise run security:workflows

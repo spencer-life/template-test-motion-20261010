@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "skills": {
+    "animate": {
+      "source": "emilkowalski/skills",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "sourceType": "github",
+      "ref": "e8a175de22ae1e49370fc144c1f3bb9aeedf988d",
+      "computedHash": "3442b8bf9ca8efcf87c64c41addaa943ae1f58576613a9fee83bbfa608942a6a"
+    },
+    "modern-web-guidance": {
+      "source": "GoogleChrome/modern-web-guidance",
+      "sourceUrl": "https://github.com/GoogleChrome/modern-web-guidance.git",
+      "sourceType": "github",
+      "ref": "a97286845f2baba38988f9e5fe2b2a1351021e50",
+      "computedHash": "2c63fadd8a75c47e4bef5a1b190631dc89e96e761929114dd1673eec888ea579"
+    },
+    "review-animations": {
+      "source": "emilkowalski/skills",
+      "sourceUrl": "https://github.com/emilkowalski/skills.git",
+      "sourceType": "github",
+      "ref": "e8a175de22ae1e49370fc144c1f3bb9aeedf988d",
+      "computedHash": "b87cb9cc4d9e01f872a1093827997a71149b042f58f79021264483332abdbbd3"
+    }
+  }
+}

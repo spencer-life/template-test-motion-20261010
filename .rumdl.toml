@@ -1,0 +1,9 @@
+[global]
+disable = ["MD013"]
+exclude = [
+  ".agents/**",
+  ".issues/**",
+  ".repo-state/**",
+  "node_modules/**",
+  ".venv/**",
+]

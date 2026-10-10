@@ -1,0 +1,11 @@
+{
+  "detector": {
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "Inter",
+        "reason": "Inter is an intentional starting font. Preserve explicit project typography choices; do not replace it merely for novelty."
+      }
+    ]
+  }
+}
